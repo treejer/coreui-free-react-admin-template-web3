@@ -1,18 +1,32 @@
+import {useEffect, useCallback} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSignMessage } from 'wagmi'
 import { userSaga } from '../redux/modules/userSaga'
-import { nonceSaga } from '../redux/modules/userNonce'
 
 export const useGetNonce = () => {
   const dispatch = useDispatch()
-  const { data, signMessage } = useSignMessage()
-  const { isLoading, error } = useSelector((state) => state.user)
+  const { data, signMessage } = useSignMessage({ onSuccess: (...args)=> {
+      console.log(args, 'args')
+    }, onError: (error) => {
+      console.log(error, 'error')
+    } })
+  const nonceState = useSelector((state) => state.nonce)
 
-  const getNonce = async (address) => {
+
+  useEffect(() => {
+    console.log('use effect')
+    if(nonceState.message){
+      console.log('in if', nonceState.message, 'message is here')
+      signMessage({ message: nonceState.message })
+    }
+  }, [nonceState.message]);
+
+  console.log(data,' data')
+
+
+  const dispatchGetNonce = useCallback((address) => {
     try {
-      console.log('ssss')
-      const { message } = dispatch({ type: 'GET_NONCE', address })
-      console.log('response', message)
+      dispatch({ type: 'GET_NONCE', address, handleSuccess: signMessage })
       // if (response) {
       //   const message = 'The nonce message'
       //   await signMessage({ message })
@@ -27,8 +41,9 @@ export const useGetNonce = () => {
       console.log('Error:', error)
       throw error
     }
-  }
-  return getNonce
+  }, [])
+
+  return {...nonceState, dispatchGetNonce}
 }
 
 export const useLogin = () => {

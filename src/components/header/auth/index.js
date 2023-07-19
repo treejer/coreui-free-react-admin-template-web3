@@ -1,23 +1,30 @@
-import React, { useState, useEffect } from 'react'
-import { useWeb3Modal } from '@web3modal/react'
-import { useNetwork, useSwitchNetwork, useAccount, useSignMessage } from 'wagmi'
+import React, {useState, useEffect} from 'react'
+import {useWeb3Modal} from '@web3modal/react'
+import {useNetwork, useSwitchNetwork, useAccount, useSignMessage} from 'wagmi'
 import ChainDropdown from './ChainDropdown'
 import WalletDropdown from './WalletDropdown'
 import supportedNetwork from './SupportedNetwork'
-import { useGetNonce, useLogin } from '../../../hooks/sign'
-import { CButton } from '@coreui/react'
-import { ToastContainer, toast } from 'react-toastify'
+import {useGetNonce, useLogin} from '../../../hooks/sign'
+import {CButton} from '@coreui/react'
+import {ToastContainer, toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 const ConnectWalletButton = () => {
   const [visible, setVisible] = useState(false)
-  const { chain } = useNetwork()
-  const { open } = useWeb3Modal()
-  const { chains, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
-  const { address, status } = useAccount()
-  const { data, error, signMessage } = useSignMessage()
+  const {chain} = useNetwork()
+  const {open} = useWeb3Modal()
+  const {chains, isLoading, pendingChainId, switchNetwork} = useSwitchNetwork()
+  const {address, status} = useAccount()
+  const {data, error, signMessage} = useSignMessage()
   const login = useLogin()
-  const getNonce = useGetNonce()
+  const {
+    message,
+    isLoading: getNonceIsLoading,
+    error: getNonceError,
+    dispatchGetNonce,
+  } = useGetNonce()
+
+  console.log(message, 'message is here')
 
   const findToken = (name) => {
     return supportedNetwork.find((x) => x.name === name)
@@ -35,7 +42,7 @@ const ConnectWalletButton = () => {
 
   const signIn = async () => {
     try {
-      const { message } = getNonce(address)
+      dispatchGetNonce(address)
       console.log('Nonce data:', message)
       // if (data) {
       //   getToken(data, address)
@@ -58,7 +65,7 @@ const ConnectWalletButton = () => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer/>
       <div className="d-flex flex-row-reverse align-items-center">
         {!address && (
           <CButton
