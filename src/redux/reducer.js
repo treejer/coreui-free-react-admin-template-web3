@@ -1,35 +1,10 @@
-// reducer.js
-// Import action types
-import { SET_TOKEN, SET_USER, SET_SIDEBAR_SHOW } from './actionTypes';
+import { combineReducers } from 'redux'
+import { userReducer } from './modules/userSaga'
+import { nonceReducer } from './modules/userNonce'
 
-// Initial state
-const initialState = {
-  sidebarShow: true,
-  token: null,
-  user: null
-};
+const rootReducer = combineReducers({
+  user: userReducer,
+  nonce: nonceReducer,
+})
 
-// Reducer
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case SET_TOKEN:
-      return {
-        ...state,
-        token: action.payload
-      };
-    case SET_USER:
-      return {
-        ...state,
-        user: action.payload
-      };
-    case SET_SIDEBAR_SHOW:
-      return {
-        ...state,
-        sidebarShow: action.payload
-      };
-    default:
-      return state;
-  }
-};
-
-export default reducer;
+export default rootReducer

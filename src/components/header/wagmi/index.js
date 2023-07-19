@@ -1,21 +1,21 @@
-import React from 'react';
-import ConnectWalletButton from '../auth';
-import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum';
-import { Web3Modal } from '@web3modal/react';
-import { configureChains, createConfig, WagmiConfig } from 'wagmi';
-import { arbitrum, mainnet, polygon } from 'wagmi/chains';
+import React from 'react'
+import ConnectWalletButton from '../auth'
+import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+import { Web3Modal } from '@web3modal/react'
+import { configureChains, createConfig, WagmiConfig } from 'wagmi'
+import { arbitrum, mainnet, polygon } from 'wagmi/chains'
 
-const chains = [arbitrum, mainnet, polygon];
-const projectId = 'Your Projcet ID';
+const chains = [arbitrum, mainnet, polygon]
+const projectId = '8a64a7c496c46bffe77d853c5220f54d'
 
-const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
+const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
 const wagmiConfig = createConfig({
   autoConnect: true,
   connectors: w3mConnectors({ projectId, version: 1, chains }),
-  publicClient
-});
+  publicClient,
+})
 
-const ethereumClient = new EthereumClient(wagmiConfig, chains);
+const ethereumClient = new EthereumClient(wagmiConfig, chains)
 
 const WagmiAuth = () => {
   return (
@@ -23,7 +23,7 @@ const WagmiAuth = () => {
       <ConnectWalletButton />
       <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
     </WagmiConfig>
-  );
-};
+  )
+}
 
-export default WagmiAuth;
+export default WagmiAuth

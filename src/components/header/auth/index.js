@@ -1,78 +1,60 @@
-import React, { useState, useEffect } from 'react';
-import { useWeb3Modal } from '@web3modal/react';
-import { useNetwork, useSwitchNetwork, useAccount } from 'wagmi';
-import { useDispatch, useSelector } from 'react-redux';
-import { setToken } from '../../../redux/actions';
-import { useSignMessage } from 'wagmi';
-import ChainDropdown from './ChainDropdown';
-import WalletDropdown from './WalletDropdown';
-import supportedNetwork from './SupportedNetwork';
-import { getNonce, login } from '../../../services/apiServices';
-import { CButton } from '@coreui/react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState, useEffect } from 'react'
+import { useWeb3Modal } from '@web3modal/react'
+import { useNetwork, useSwitchNetwork, useAccount, useSignMessage } from 'wagmi'
+import ChainDropdown from './ChainDropdown'
+import WalletDropdown from './WalletDropdown'
+import supportedNetwork from './SupportedNetwork'
+import { useGetNonce, useLogin } from '../../../hooks/sign'
+import { CButton } from '@coreui/react'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const ConnectWalletButton = () => {
-  const [visible, setVisible] = useState(false);
-  const { chain } = useNetwork();
-  const { open } = useWeb3Modal();
-  const { chains, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork();
-  const { address, status } = useAccount();
-  const { data, error, signMessage } = useSignMessage();
-  const dispatch = useDispatch();
-  const token = useSelector((state) => state.token);
+  const [visible, setVisible] = useState(false)
+  const { chain } = useNetwork()
+  const { open } = useWeb3Modal()
+  const { chains, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
+  const { address, status } = useAccount()
+  const { data, error, signMessage } = useSignMessage()
+  const login = useLogin()
+  const getNonce = useGetNonce()
 
   const findToken = (name) => {
-    return supportedNetwork.find((x) => x.name === name);
-  };
+    return supportedNetwork.find((x) => x.name === name)
+  }
 
   const handleDisconnect = () => {
-    setVisible(false);
-    dispatch(setToken('')); // Reset token in store
-  };
+    setVisible(false)
+  }
 
   useEffect(() => {
     if (!address) {
-      handleDisconnect();
+      handleDisconnect()
     }
-  }, [address, handleDisconnect]);
+  }, [address])
 
   const signIn = async () => {
     try {
-      const response = await getNonce(address);
-      if (response) {
-        try {
-          const message = response.message;
-          await signMessage({ message: message });
-          if (!error && data !== undefined) {
-            getToken(data, address);
-          }
-        } catch (error) {
-          console.log('Error:', error);
-          toast.error('An error occurred. Please try again later.');
-        }
-      }
+      const { message } = getNonce(address)
+      console.log('Nonce data:', message)
+      // if (data) {
+      //   getToken(data, address)
+      // }
     } catch (error) {
-      console.log('Error:', error);
-      toast.error('An error occurred. Please try again later.');
+      console.log('Error:', error)
+      toast.error('An error occurred. Please try again later.')
     }
-  };
+  }
 
   const getToken = async (signature, address) => {
     try {
       if (signature) {
-        const response = await login(address, signature);
-        if (response) {
-          setVisible(true);
-          dispatch(setToken(response.access_token));
-        } else {
-          // Handle the error condition if needed
-        }
+        await login(address, signature)
       }
     } catch (error) {
-      console.log('Error:', error);
+      console.log('Error:', error)
     }
-  };
+  }
 
   return (
     <>
@@ -109,7 +91,7 @@ const ConnectWalletButton = () => {
         )}
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ConnectWalletButton;
+export default ConnectWalletButton
