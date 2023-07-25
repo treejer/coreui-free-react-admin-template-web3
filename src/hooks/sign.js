@@ -1,63 +1,49 @@
-import {useEffect, useCallback} from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useSignMessage } from 'wagmi'
-import { userSaga } from '../redux/modules/userSaga'
+import { useEffect, useCallback } from 'react'
+import { useDispatch } from 'react-redux'
+import { useAccount, useSignMessage } from 'wagmi'
 
 export const useGetNonce = () => {
+  const { dispatchGetToken } = useGetToken()
+  const { address } = useAccount()
   const dispatch = useDispatch()
-  const { data, signMessage } = useSignMessage({ onSuccess: (...args)=> {
-      console.log(args, 'args')
-    }, onError: (error) => {
+  const { signMessage } = useSignMessage({
+    onSuccess: (...args) => {
+      if (args && address) {
+        dispatchGetToken(address, args[0])
+      }
+    },
+    onError: (error) => {
       console.log(error, 'error')
-    } })
-  const nonceState = useSelector((state) => state.nonce)
+    },
+  })
 
-
-  useEffect(() => {
-    console.log('use effect')
-    if(nonceState.message){
-      console.log('in if', nonceState.message, 'message is here')
-      signMessage({ message: nonceState.message })
-    }
-  }, [nonceState.message]);
-
-  console.log(data,' data')
-
-
-  const dispatchGetNonce = useCallback((address) => {
-    try {
-      dispatch({ type: 'GET_NONCE', address, handleSuccess: signMessage })
-      // if (response) {
-      //   const message = 'The nonce message'
-      //   await signMessage({ message })
-
-      //   if (data && Object.keys(data).length > 0) {
-      //     return { data }
-      //   } else {
-      //     throw new Error('Sign message data is empty.')
-      //   }
-      // }
-    } catch (error) {
-      console.log('Error:', error)
-      throw error
-    }
-  }, [])
-
-  return {...nonceState, dispatchGetNonce}
-}
-
-export const useLogin = () => {
-  const dispatch = useDispatch()
-
-  const login = async (address, signature) => {
-    try {
-      const loginResponse = await dispatch(userSaga(address, signature))
-      console.log('calll login response', loginResponse)
-    } catch (error) {
-      console.log('Error:', error)
-      throw error
+  const handleSignMessage = async (nonceState) => {
+    if (nonceState) {
+      signMessage({ message: nonceState })
     }
   }
 
-  return login
+  const dispatchGetNonce = useCallback(() => {
+    try {
+      dispatch({ type: 'GET_NONCE', address, handleSuccess: handleSignMessage })
+    } catch (error) {
+      throw error
+    }
+  }, [address, handleSignMessage])
+
+  return { dispatchGetNonce }
+}
+
+export const useGetToken = () => {
+  const dispatch = useDispatch()
+
+  const dispatchGetToken = useCallback((address, signature) => {
+    try {
+      dispatch({ type: 'USER_SIGN', address, signature })
+    } catch (error) {
+      throw error
+    }
+  }, [dispatch])
+
+  return { dispatchGetToken }
 }
