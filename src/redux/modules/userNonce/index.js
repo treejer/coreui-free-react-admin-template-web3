@@ -1,6 +1,7 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 import apiPlugin from '../../../services/api'
-const API_URL = 'https://nestapi.treejer.com'
+const API_URL = process.env.REACT_APP_BASE_URL
+console.log('process', process.env)
 
 // User reducer
 const initialState = {
