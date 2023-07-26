@@ -1,5 +1,13 @@
-import React from 'react';
-import { CAvatar, CBadge, CDropdown, CDropdownMenu, CDropdownItem, CDropdownToggle } from '@coreui/react';
+import React from 'react'
+import PropTypes from 'prop-types'
+import {
+  CAvatar,
+  CBadge,
+  CDropdown,
+  CDropdownMenu,
+  CDropdownItem,
+  CDropdownToggle,
+} from '@coreui/react'
 
 const WalletDropdown = ({ address, open, signIn, visible, status }) => {
   return (
@@ -16,7 +24,11 @@ const WalletDropdown = ({ address, open, signIn, visible, status }) => {
         </CBadge>
       )}
       <CDropdownToggle className="w-25 text-truncate" shape="rounded-pill" color="primary">
-        <CAvatar src={`https://www.gravatar.com/avatar/${address}?d=identicon`} size="sm" className="me-2" />
+        <CAvatar
+          size="sm"
+          className="me-2"
+          src={`https://www.gravatar.com/avatar/${address}?d=identicon`}
+        />
         {address}
       </CDropdownToggle>
       {/* Dropdown Menu */}
@@ -25,7 +37,15 @@ const WalletDropdown = ({ address, open, signIn, visible, status }) => {
         <CDropdownItem onClick={signIn}>Sign in wallet</CDropdownItem>
       </CDropdownMenu>
     </CDropdown>
-  );
-};
+  )
+}
 
-export default WalletDropdown;
+WalletDropdown.propTypes = {
+  address: PropTypes.string.isRequired,
+  open: PropTypes.func.isRequired,
+  signIn: PropTypes.func.isRequired,
+  visible: PropTypes.bool.isRequired,
+  status: PropTypes.string.isRequired,
+}
+
+export default WalletDropdown

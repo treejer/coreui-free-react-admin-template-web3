@@ -1,22 +1,21 @@
-// actions.js
-// Import action types
-import { SET_TOKEN, SET_USER, SET_SIDEBAR_SHOW } from './actionTypes';
+// actionTypes.js
+export const SET_TOKEN = 'SET_TOKEN'
+export const SET_USER = 'SET_USER'
+export const SET_SIDEBAR_SHOW = 'SET_SIDEBAR_SHOW'
 
-
-// Action creators
 export const setToken = (token) => ({
   type: SET_TOKEN,
-  payload: token
-});
+  payload: token,
+})
 
 export const setUser = (user) => ({
   type: SET_USER,
-  payload: user
-});
+  payload: user,
+})
 
 export const setSidebarShow = (show) => {
   return {
     type: SET_SIDEBAR_SHOW,
     payload: show,
-  };
-};
+  }
+}

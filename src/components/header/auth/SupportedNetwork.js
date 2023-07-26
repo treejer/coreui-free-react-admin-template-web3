@@ -1,7 +1,7 @@
 // supportedNetwork.js
-import ethIcon from '../../../assets/images/tokens/eth.png';
-import arbitIcon from '../../../assets/images/tokens/arbitrum.svg';
-import maticIcon from '../../../assets/images/tokens/polygon.svg';
+import ethIcon from '../../../assets/images/tokens/eth.png'
+import arbitIcon from '../../../assets/images/tokens/arbitrum.svg'
+import maticIcon from '../../../assets/images/tokens/polygon.svg'
 
 const supportedNetwork = [
   {
@@ -16,6 +16,6 @@ const supportedNetwork = [
     name: 'Polygon',
     cover: maticIcon,
   },
-];
+]
 
-export default supportedNetwork;
+export default supportedNetwork
