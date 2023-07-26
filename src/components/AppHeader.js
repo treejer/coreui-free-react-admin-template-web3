@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { setSidebarShow } from '../redux/modules/init'
+import { useToggleSidebar } from '../redux/modules/init'
 import {
   CContainer,
   CHeader,
@@ -17,16 +17,14 @@ import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from '@coreui/icons'
 
 import { AppBreadcrumb } from './index'
 import { logo } from '../assets/brand/logo'
-import WagmiAuth from './header/wagmi' // Import the WagmiAuth component
+import WagmiAuth from './header/wagmi'
 
 const AppHeader = () => {
-  const dispatch = useDispatch()
-  const handleToggleSidebar = () => dispatch(setSidebarShow())
-
+  const { toggleSidebar } = useToggleSidebar()
   return (
     <CHeader position="sticky" className="mb-4">
       <CContainer fluid>
-        <CHeaderToggler className="ps-1" onClick={handleToggleSidebar}>
+        <CHeaderToggler className="ps-1" onClick={toggleSidebar}>
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
         <CHeaderBrand className="mx-auto d-md-none" to="/">
