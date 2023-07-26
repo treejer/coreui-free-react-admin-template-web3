@@ -6,7 +6,6 @@ export const getNonce = async (address) => {
     const response = await apiPlugin.getData(`${API_URL}/nonce/${address}`);
     return response;
   } catch (error) {
-    console.log('Error:', error);
     throw error;
   }
 };
@@ -18,7 +17,6 @@ export const login = async (address, signature) => {
     });
     return response;
   } catch (error) {
-    console.log('Error:', error);
     throw error;
   }
 };

@@ -4,9 +4,7 @@ import supportedNetwork from './SupportedNetwork'
 import { CAvatar, CDropdown, CDropdownToggle, CDropdownMenu, CDropdownItem } from '@coreui/react'
 
 const ChainDropdown = ({ chains, chain, switchNetwork, isLoading, pendingChainId }) => {
-  const findToken = (name) => {
-    return supportedNetwork.find((x) => x.name === name)
-  }
+  const findToken = (name) => supportedNetwork.find((x) => x.name === name)
 
   return (
     <CDropdown dark>

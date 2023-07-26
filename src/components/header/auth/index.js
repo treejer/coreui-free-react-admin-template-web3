@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useWeb3Modal } from '@web3modal/react'
-import { useNetwork, useSwitchNetwork, useAccount, useSignMessage } from 'wagmi'
+import { useNetwork, useSwitchNetwork, useAccount } from 'wagmi'
 import ChainDropdown from './ChainDropdown'
 import WalletDropdown from './WalletDropdown'
 import supportedNetwork from './SupportedNetwork'
@@ -17,9 +17,7 @@ const ConnectWalletButton = () => {
   const { address, status } = useAccount()
   const { dispatchGetNonce } = useGetNonce()
 
-  const findToken = (name) => {
-    return supportedNetwork.find((x) => x.name === name)
-  }
+  const findToken = (name) => supportedNetwork.find((x) => x.name === name)
 
   const handleDisconnect = () => {
     setVisible(false)
@@ -35,7 +33,6 @@ const ConnectWalletButton = () => {
     try {
       dispatchGetNonce(address)
     } catch (error) {
-      console.log('Error:', error)
       toast.error('An error occurred. Please try again later.')
     }
   }
