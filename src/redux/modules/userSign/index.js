@@ -1,4 +1,4 @@
-import { put } from 'redux-saga/effects'
+import { put, takeEvery } from 'redux-saga/effects'
 import ReduxFetchState from 'redux-fetch-state'
 import apiPlugin from '../../../services/api'
 const API_URL = process.env.REACT_APP_BASE_URL
@@ -15,6 +15,10 @@ export function* watchUserSign(action) {
   } catch (e) {
     yield put(actions.loadFailure(e))
   }
+}
+
+export function* userSignSagas() {
+  yield takeEvery(actionTypes.load, watchUserSign)
 }
 
 export {
