@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
-import { userReducer } from './modules/userSaga'
-import { nonceReducer } from './modules/userNonce'
+import { userSignReducer } from './modules/userSign'
+import { userNonceReducer } from './modules/userNonce'
 
 const rootReducer = combineReducers({
-  user: userReducer,
-  nonce: nonceReducer,
+  userSignReducer,
+  userNonceReducer,
 })
 
 export default rootReducer

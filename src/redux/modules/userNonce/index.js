@@ -1,42 +1,27 @@
-import { call, put, takeEvery } from 'redux-saga/effects'
+import { put } from 'redux-saga/effects'
+import ReduxFetchState from 'redux-fetch-state'
+import { signMessage } from '@wagmi/core'
 import apiPlugin from '../../../services/api'
+import { userSignActions } from '../userSign'
 const API_URL = process.env.REACT_APP_BASE_URL
-console.log('process', process.env)
 
-// User reducer
-const initialState = {
-  signature: null,
-  wallet: null,
-  error: null,
-  message: '',
-}
+const { actions, actionTypes, reducer } = new ReduxFetchState('userNonce')
 
-export function nonceReducer(state = initialState, action) {
-  switch (action.type) {
-    case 'GET_NONCE':
-      return { ...state, isLoading: true, error: null }
-    case 'GET_NONCE_SUCCESS':
-      return { ...state, isLoading: false, message: action.payload }
-    case 'GET_NONCE_FAILURE':
-      return { ...state, isLoading: false, error: action.error }
-    default:
-      return state
-  }
-}
-
-// User saga
-function* getNonce(action) {
+export function* watchUserNonce(action) {
+  const { address } = action.payload
   try {
-    const { address, handleSuccess } = action
-    const response = yield call(() => apiPlugin.getData(`${API_URL}/nonce/${address}`))
-    yield put({ type: 'GET_NONCE_SUCCESS', payload: response })
-    handleSuccess(response.message)
-  } catch (error) {
-    // Dispatch failure action if an error occurs
-    yield put({ type: 'GET_NONCE_FAILURE', error })
+    const response = yield apiPlugin.getData(`${API_URL}/nonce/${address}`)
+    const { message } = response
+    const signature = yield signMessage({ message: message })
+    yield put(actions.loadSuccess(response))
+    yield put(userSignActions.load({ address, signature }))
+  } catch (e) {
+    yield put(actions.loadFailure(e))
   }
 }
 
-export function* nonceSaga() {
-  yield takeEvery('GET_NONCE', getNonce)
+export {
+  reducer as userNonceReducer,
+  actions as userNonceActions,
+  actionTypes as userNonceActionTypes,
 }
