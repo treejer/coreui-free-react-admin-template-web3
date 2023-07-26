@@ -1,29 +1,18 @@
-// sidebar.js
-// Action types
-export const SET_SIDEBAR_SHOW = 'SET_SIDEBAR_SHOW';
+import { createSlice } from '@reduxjs/toolkit'
 
-// Action creators
-export const setSidebarShow = (show) => ({
-  type: SET_SIDEBAR_SHOW,
-  payload: show,
-});
-
-// Initial state
 const initialState = {
   sidebarShow: true,
-};
+}
 
-// Reducer
-const sidebarReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case SET_SIDEBAR_SHOW:
-      return {
-        ...state,
-        sidebarShow: action.payload,
-      };
-    default:
-      return state;
-  }
-};
+const initSlice = createSlice({
+  name: 'init',
+  initialState,
+  reducers: {
+    setSidebarShow: (state) => {
+      state.sidebarShow = !state.sidebarShow
+    },
+  },
+})
 
-export default sidebarReducer;
+export const { setSidebarShow } = initSlice.actions
+export default initSlice.reducer

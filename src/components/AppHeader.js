@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { setSidebarShow } from '../redux/actions'
+import { useDispatch } from 'react-redux'
+import { setSidebarShow } from '../redux/modules/init'
 import {
   CContainer,
   CHeader,
@@ -21,12 +21,12 @@ import WagmiAuth from './header/wagmi' // Import the WagmiAuth component
 
 const AppHeader = () => {
   const dispatch = useDispatch()
-  const sidebarShow = useSelector((state) => state.sidebarShow)
+  const handleToggleSidebar = () => dispatch(setSidebarShow())
 
   return (
     <CHeader position="sticky" className="mb-4">
       <CContainer fluid>
-        <CHeaderToggler className="ps-1" onClick={() => dispatch(setSidebarShow(!sidebarShow))}>
+        <CHeaderToggler className="ps-1" onClick={handleToggleSidebar}>
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
         <CHeaderBrand className="mx-auto d-md-none" to="/">
