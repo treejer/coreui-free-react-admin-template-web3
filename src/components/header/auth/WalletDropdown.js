@@ -16,7 +16,7 @@ const WalletDropdown = ({ address, open, signIn, visible, status }) => {
         <CBadge
           className="border border-light p-2 spinner-grow w-15-icon"
           role="status"
-          color={`${status === 'connected' ? 'success' : 'danger'}`}
+          color={status === 'connected' ? 'success' : 'danger'}
           position="top-end"
           shape="rounded-circle"
         >
