@@ -12,7 +12,7 @@ yarn.lock
 /build
 
 .env
-
+.vscode
 
 # misc
 .eslintcache
