@@ -4,11 +4,10 @@ This project is a web3 version of the CoreUI React admin template. It is a fork 
 Overview
 We have extended the functionality of the original CoreUI template by adding web3 capabilities using the following libraries:
 
-- [Wagmi] - For connecting to wallets and interacting with blockchains.
-- [Redux] - For state management.
-- [Redux Saga] - For managing side effects, such as fetching blockchain data.
+- Wagmi - For connecting to wallets and interacting with blockchains.
+- Redux - For state management.
+- Redux Saga - For managing side effects, such as fetching blockchain data.
 
-  
 The CoreUI template already utilizes React and Bootstrap to provide a robust admin template with a wide range of UI components.
 
 ## Quick Start
@@ -71,8 +70,7 @@ The documentation for the CoreUI Admin Template is hosted at our website [CoreUI
 
 ### About
 
-This project is built and maintained by the [Treejer Team](https://github.com/treejer)
-. The source code is available on [GitHub]([https://github.com/treejer](https://github.com/treejer/coreui-free-react-admin-template-web3)).
+This project is built and maintained by the [Treejer Team](https://github.com/treejer). The source code is available on [GitHub]([https://github.com/treejer](https://github.com/treejer/coreui-free-react-admin-template-web3)).
 Please feel free to reach out if you have any questions or need further assistance. We are happy to help!
 
 ## Documentation
