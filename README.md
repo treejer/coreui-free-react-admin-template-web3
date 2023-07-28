@@ -60,6 +60,10 @@ or
 $ yarn build
 ```
 
+# Env Setup
+Duplicate the environment file and modify its variable values.
+cp .env.example .env
+
 ## Documentation
 
 The documentation for the CoreUI Admin Template is hosted at our website [CoreUI for React](https://coreui.io/react/)
