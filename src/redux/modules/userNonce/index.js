@@ -11,7 +11,6 @@ const { actions, actionTypes, reducer } = new ReduxFetchState('userNonce')
 
 export function* watchUserNonce(action) {
   const { address } = action.payload
-  console.log('im here', action)
   try {
     const response = yield apiPlugin.getData(`${API_URL}/nonce/${address}`)
     const { message } = response
