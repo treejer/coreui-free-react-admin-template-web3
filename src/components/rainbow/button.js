@@ -42,9 +42,7 @@ const RainbowButton = () => {
     handleEffectLogic(address, chain, dispatchGetNonce, dispatchRemoveToken)
   }
 
-  // Check for the condition outside the return statement
   const showSignInWalletButton = !userToken && address
-
   return (
     <>
       {showSignInWalletButton && (
