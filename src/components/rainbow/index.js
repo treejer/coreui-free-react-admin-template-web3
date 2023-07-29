@@ -15,7 +15,7 @@ const { chains, publicClient } = configureChains(
 
 const { connectors } = getDefaultWallets({
   appName: 'Wallet Connect With RainBow',
-  projectId: process.env.REACT_APP_RAINBOW_KEY,
+  projectId: process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
   chains,
 })
 
