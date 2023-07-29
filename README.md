@@ -60,9 +60,11 @@ or
 $ yarn build
 ```
 
-# Env Setup
+## Env Setup
 Duplicate the environment file and modify its variable values.
+```bash
 cp .env.example .env
+```
 
 ## Documentation
 
