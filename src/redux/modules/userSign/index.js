@@ -1,13 +1,14 @@
-import { put, takeEvery } from 'redux-saga/effects'
+import { put, takeEvery, select } from 'redux-saga/effects'
 import { useCallback } from 'react'
 import ReduxFetchState from 'redux-fetch-state'
 import apiPlugin from '../../../services/api'
 import { useDispatch } from 'react-redux'
-const API_URL = process.env.REACT_APP_BASE_URL
-
+import { configData } from '../appConfig'
 const { actions, actionTypes, reducer } = new ReduxFetchState('userSign')
 
 export function* watchUserSign(action) {
+  const selectedConfigData = yield select(configData)
+  const API_URL = selectedConfigData?.base_url
   const { address, signature } = action.payload
   try {
     const response = yield apiPlugin.postData(`${API_URL}/login/${address}`, {

@@ -1,15 +1,17 @@
 import { useCallback } from 'react'
-import { put, takeEvery } from 'redux-saga/effects'
+import { put, takeEvery, select } from 'redux-saga/effects'
 import ReduxFetchState from 'redux-fetch-state'
 import { getAccount, signMessage } from '@wagmi/core'
 import { useDispatch } from 'react-redux'
 import apiPlugin from '../../../services/api'
+import { configData } from '../appConfig'
 import { userSignActions } from '../userSign'
-const API_URL = process.env.REACT_APP_BASE_URL
 
 const { actions, actionTypes, reducer } = new ReduxFetchState('userNonce')
 
 export function* watchUserNonce(action) {
+  const selectedConfigData = yield select(configData)
+  const API_URL = selectedConfigData?.base_url
   const { address } = action.payload
   try {
     const response = yield apiPlugin.getData(`${API_URL}/nonce/${address}`)
