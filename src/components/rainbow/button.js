@@ -24,6 +24,10 @@ const RainbowButton = () => {
   const userToken = useSelector((state) => state.userSign?.data?.access_token)
 
   useEffect(() => {
+    handleEffectLogic(address, chain, dispatchGetNonce, dispatchRemoveToken)
+  }, [address, chain, dispatchGetNonce, dispatchRemoveToken])
+
+  const handleEffectLogic = (address, chain, dispatchGetNonce, dispatchRemoveToken) => {
     if (address) {
       dispatchGetNonce(address)
     } else {
@@ -32,19 +36,18 @@ const RainbowButton = () => {
     if (chain) {
       dispatchRemoveToken()
     }
-  }, [address, chain, dispatchGetNonce, dispatchRemoveToken])
+  }
 
   const handleSignInWallet = () => {
-    if (address) {
-      dispatchGetNonce(address)
-    } else {
-      dispatchRemoveToken()
-    }
+    handleEffectLogic(address, chain, dispatchGetNonce, dispatchRemoveToken)
   }
+
+  // Check for the condition outside the return statement
+  const showSignInWalletButton = !userToken && address
 
   return (
     <>
-      {!userToken && address && (
+      {showSignInWalletButton && (
         <CButton color="light" className="mx-2" onClick={handleSignInWallet}>
           Sign In Wallet
         </CButton>
