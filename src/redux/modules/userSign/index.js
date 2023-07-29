@@ -1,6 +1,8 @@
 import { put, takeEvery } from 'redux-saga/effects'
+import { useCallback } from 'react'
 import ReduxFetchState from 'redux-fetch-state'
 import apiPlugin from '../../../services/api'
+import { useDispatch } from 'react-redux'
 const API_URL = process.env.REACT_APP_BASE_URL
 
 const { actions, actionTypes, reducer } = new ReduxFetchState('userSign')
@@ -19,6 +21,16 @@ export function* watchUserSign(action) {
 
 export function* userSignSagas() {
   yield takeEvery(actionTypes.load, watchUserSign)
+}
+
+export function useRemoveToken() {
+  const dispatch = useDispatch()
+
+  const dispatchRemoveToken = useCallback(() => {
+    dispatch(actions.loadSuccess([]))
+  }, [dispatch])
+
+  return { dispatchRemoveToken }
 }
 
 export {
