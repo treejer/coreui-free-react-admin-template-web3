@@ -4,7 +4,7 @@ This project is a web3 version of the CoreUI React admin template. It is a fork 
 Overview
 We have extended the functionality of the original CoreUI template by adding web3 capabilities using the following libraries:
 
-- RainBowKit - RainbowKit is a React library that makes it easy to add wallet connection to your dapp. It's intuitive, responsive and customizable.
+- 🌈RainBowKit - RainbowKit is a React library that makes it easy to add wallet connection to your dapp. It's intuitive, responsive and customizable.
 - Axios - Axios is a simple promise based HTTP client for the browser and node.js. Axios provides a simple to use library in a small package with a very extensible interface.
 - Redux - For state management.
 - Redux Saga - For managing side effects, such as fetching blockchain data.
