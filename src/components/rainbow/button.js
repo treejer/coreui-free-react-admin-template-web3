@@ -3,43 +3,50 @@ import { CButton } from '@coreui/react'
 import { useSelector } from 'react-redux'
 import { RainbowKitProvider, ConnectButton } from '@rainbow-me/rainbowkit'
 import { configureChains, useAccount, useNetwork } from 'wagmi'
-import { mainnet, polygon, optimism, arbitrum, zora } from 'wagmi/chains'
+import { mainnet, polygon, polygonMumbai } from 'wagmi/chains'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { useGetNonce } from '../../redux/modules/userNonce'
+import { useSetConfig } from '../../redux/modules/appConfig'
 import { useRemoveToken } from '../../redux/modules/userSign'
 import { publicProvider } from 'wagmi/providers/public'
 import '@rainbow-me/rainbowkit/styles.css'
 
 const apiKey = process.env.REACT_APP_ALCHEMY_ID
 
-const supportedChains = [mainnet, polygon, optimism, arbitrum, zora]
+const supportedChains = [mainnet, polygon, polygonMumbai]
 const providers = [alchemyProvider({ apiKey }), publicProvider()]
 const { chains } = configureChains(supportedChains, providers)
 
 const RainbowButton = () => {
-  const { address } = useAccount()
+  const { address } = useAccount({
+    onConnect() {
+      if (chain) {
+        dispatchSetConfig()
+        dispatchGetNonce(address)
+      }
+    },
+    onDisconnect() {
+      dispatchRemoveToken()
+    },
+    onSuccess(data) {
+      return data
+    },
+  })
   const { chain } = useNetwork()
   const { dispatchGetNonce } = useGetNonce()
   const { dispatchRemoveToken } = useRemoveToken()
+  const { dispatchSetConfig } = useSetConfig()
   const userToken = useSelector((state) => state.userSign?.data?.access_token)
 
   useEffect(() => {
-    handleEffectLogic(address, chain, dispatchGetNonce, dispatchRemoveToken)
-  }, [address, chain, dispatchGetNonce, dispatchRemoveToken])
-
-  const handleEffectLogic = (address, chain, dispatchGetNonce, dispatchRemoveToken) => {
-    if (address) {
-      dispatchGetNonce(address)
-    } else {
-      dispatchRemoveToken()
-    }
     if (chain) {
       dispatchRemoveToken()
     }
-  }
+  }, [chain, dispatchRemoveToken])
 
   const handleSignInWallet = () => {
-    handleEffectLogic(address, chain, dispatchGetNonce, dispatchRemoveToken)
+    dispatchSetConfig()
+    dispatchGetNonce(address)
   }
 
   const showSignInWalletButton = !userToken && address
@@ -50,7 +57,7 @@ const RainbowButton = () => {
           Sign In Wallet
         </CButton>
       )}
-      <RainbowKitProvider chains={chains}>
+      <RainbowKitProvider chains={chains} initialChain={process.env.REACT_APP_DEFAULT_CHAIN_ID}>
         <ConnectButton label="Connect Wallet" />
       </RainbowKitProvider>
     </>
