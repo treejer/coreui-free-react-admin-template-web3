@@ -37,6 +37,8 @@ const RainbowButton = () => {
   const { dispatchRemoveToken } = useRemoveToken()
   const { dispatchSetConfig } = useSetConfig()
   const userToken = useSelector((state) => state.userSign?.data?.access_token)
+  const isLoading = useSelector((state) => state.userNonce.loading || state.userSign.loading);
+
 
   useEffect(() => {
     if (chain) {
@@ -53,7 +55,7 @@ const RainbowButton = () => {
   return (
     <>
       {showSignInWalletButton && (
-        <CButton color="light" className="mx-2" onClick={handleSignInWallet}>
+        <CButton color="light" className="mx-2" onClick={handleSignInWallet} disabled={isLoading}>
           Sign In Wallet
         </CButton>
       )}
