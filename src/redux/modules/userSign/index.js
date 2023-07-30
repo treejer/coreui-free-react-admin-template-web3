@@ -7,8 +7,8 @@ import { configData } from '../appConfig'
 const { actions, actionTypes, reducer } = new ReduxFetchState('userSign')
 
 export function* watchUserSign(action) {
-  const selectedConfigData = yield select(configData)
-  const API_URL = selectedConfigData?.base_url
+  const { base_url } = yield select(configData)
+  const API_URL = base_url
   const { address, signature } = action.payload
   try {
     const response = yield apiPlugin.postData(`${API_URL}/login/${address}`, {
