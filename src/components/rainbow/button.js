@@ -37,8 +37,7 @@ const RainbowButton = () => {
   const { dispatchRemoveToken } = useRemoveToken()
   const { dispatchSetConfig } = useSetConfig()
   const userToken = useSelector((state) => state.userSign?.data?.access_token)
-  const isLoading = useSelector((state) => state.userNonce.loading || state.userSign.loading);
-
+  const isLoading = useSelector((state) => state.userNonce.loading || state.userSign.loading)
 
   useEffect(() => {
     if (chain) {
