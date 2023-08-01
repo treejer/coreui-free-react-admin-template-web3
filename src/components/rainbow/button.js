@@ -6,13 +6,11 @@ import { configureChains, useAccount, useNetwork } from 'wagmi'
 import { mainnet, polygon, polygonMumbai } from 'wagmi/chains'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { useGetNonce } from '../../redux/modules/userNonce'
-import { useSetConfig } from '../../redux/modules/appConfig'
 import { useRemoveToken } from '../../redux/modules/userSign'
 import { publicProvider } from 'wagmi/providers/public'
 import '@rainbow-me/rainbowkit/styles.css'
 
 const apiKey = process.env.REACT_APP_ALCHEMY_ID
-
 const supportedChains = [mainnet, polygon, polygonMumbai]
 const providers = [alchemyProvider({ apiKey }), publicProvider()]
 const { chains } = configureChains(supportedChains, providers)
@@ -21,7 +19,6 @@ const RainbowButton = () => {
   const { address } = useAccount({
     onConnect() {
       if (chain) {
-        dispatchSetConfig()
         dispatchGetNonce(address)
       }
     },
@@ -35,22 +32,28 @@ const RainbowButton = () => {
   const { chain } = useNetwork()
   const { dispatchGetNonce } = useGetNonce()
   const { dispatchRemoveToken } = useRemoveToken()
-  const { dispatchSetConfig } = useSetConfig()
+  const isSupportedNetwork = useSelector((state) => state.web3.isSupportedNetwork)
   const userToken = useSelector((state) => state.userSign?.data?.access_token)
   const isLoading = useSelector((state) => state.userNonce.loading || state.userSign.loading)
+
 
   useEffect(() => {
     if (chain) {
       dispatchRemoveToken()
     }
-  }, [chain, dispatchRemoveToken])
+    const { unsupported } = chain
+    if (unsupported) {
+      console.log('The network you have selected is not supported.')
+    }
+  }, [chain, , dispatchRemoveToken])
 
   const handleSignInWallet = () => {
-    dispatchSetConfig()
+    // dispatchSetConfig()
+    // dispatchConfig()
     dispatchGetNonce(address)
   }
 
-  const showSignInWalletButton = !userToken && address
+  const showSignInWalletButton = !userToken && address && isSupportedNetwork
   return (
     <>
       {showSignInWalletButton && (
