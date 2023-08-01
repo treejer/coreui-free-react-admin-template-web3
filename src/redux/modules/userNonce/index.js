@@ -4,13 +4,12 @@ import ReduxFetchState from 'redux-fetch-state'
 import { getAccount, signMessage } from '@wagmi/core'
 import { useDispatch } from 'react-redux'
 import apiPlugin from '../../../services/api'
-import { configData } from '../appConfig'
 import { userSignActions } from '../userSign'
 
 const { actions, actionTypes, reducer } = new ReduxFetchState('userNonce')
 
 export function* watchUserNonce(action) {
-  const { base_url } = yield select(configData)
+  const { base_url } = yield select((state) => state.web3?.config || {})
   const API_URL = base_url
   const { address } = action.payload
   try {

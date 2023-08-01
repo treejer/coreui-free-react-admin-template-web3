@@ -3,11 +3,10 @@ import { useCallback } from 'react'
 import ReduxFetchState from 'redux-fetch-state'
 import apiPlugin from '../../../services/api'
 import { useDispatch } from 'react-redux'
-import { configData } from '../appConfig'
 const { actions, actionTypes, reducer } = new ReduxFetchState('userSign')
 
 export function* watchUserSign(action) {
-  const { base_url } = yield select(configData)
+  const { base_url } = yield select((state) => state.web3.config)
   const API_URL = base_url
   const { address, signature } = action.payload
   try {
