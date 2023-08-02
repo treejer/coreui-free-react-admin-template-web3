@@ -11,15 +11,12 @@ import {
   CNavItem,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { useDispatch } from 'react-redux'
 import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from '@coreui/icons'
 import { useToggleSidebar, useInit } from '../redux/modules/init/slice'
 import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 import { logo } from 'src/assets/brand/logo'
 import { WalletButton } from './rainbow/index'
-
-// import { useWeb3, setNetwork } from '../redux/modules/web3/slice'
 
 const AppHeader = () => {
   const { toggleSidebar } = useToggleSidebar()

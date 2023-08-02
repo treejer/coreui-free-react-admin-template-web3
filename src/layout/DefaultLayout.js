@@ -1,13 +1,7 @@
-import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import React from 'react'
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
-import { setNetwork } from '../redux/modules/web3/slice'
 
 const DefaultLayout = () => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(setNetwork())
-  }, [])
   return (
     <div>
       <AppSidebar />
