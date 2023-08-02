@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
-import { useWeb3 } from '../redux/modules/web3';
+import { setNetwork } from '../redux/modules/web3/slice'
 
 const DefaultLayout = () => {
-  const { dispatchSwitchNetwork } = useWeb3();
-
+  const dispatch = useDispatch()
   useEffect(() => {
-    dispatchSwitchNetwork()
-  }, [dispatchSwitchNetwork]);
-
+    dispatch(setNetwork())
+  }, [])
   return (
     <div>
       <AppSidebar />

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import initReducer from './modules/init'
-import web3Reducer from './modules/web3'
+import initReducer from './modules/init/slice'
+import web3Reducer from './modules/web3/slice'
 import { userSignReducer } from './modules/userSign'
 import { userNonceReducer } from './modules/userNonce'
 

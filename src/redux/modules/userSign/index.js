@@ -1,8 +1,8 @@
 import { put, takeEvery, select } from 'redux-saga/effects'
+import { useDispatch, useSelector } from 'react-redux'
 import { useCallback } from 'react'
 import ReduxFetchState from 'redux-fetch-state'
 import apiPlugin from '../../../services/api'
-import { useDispatch } from 'react-redux'
 const { actions, actionTypes, reducer } = new ReduxFetchState('userSign')
 
 export function* watchUserSign(action) {
@@ -23,14 +23,15 @@ export function* userSignSagas() {
   yield takeEvery(actionTypes.load, watchUserSign)
 }
 
-export function useRemoveToken() {
+export function useUserSign() {
   const dispatch = useDispatch()
+  const { data: userSign, ...userSignState } = useSelector((state) => state.userSign)
 
   const dispatchRemoveToken = useCallback(() => {
     dispatch(actions.loadSuccess([]))
   }, [dispatch])
 
-  return { dispatchRemoveToken }
+  return { userSign, ...userSignState, dispatchRemoveToken }
 }
 
 export {

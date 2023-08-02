@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import { CButton } from '@coreui/react'
-import { useSelector } from 'react-redux'
 import { RainbowKitProvider, ConnectButton } from '@rainbow-me/rainbowkit'
 import { configureChains, useAccount, useNetwork } from 'wagmi'
 import { mainnet, polygon, polygonMumbai } from 'wagmi/chains'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { useGetNonce } from '../../redux/modules/userNonce'
-import { useRemoveToken } from '../../redux/modules/userSign'
+import { useUserSign } from '../../redux/modules/userSign'
+import { useWeb3 } from '../../redux/modules/web3/slice'
 import { publicProvider } from 'wagmi/providers/public'
 import '@rainbow-me/rainbowkit/styles.css'
 
@@ -16,40 +16,27 @@ const providers = [alchemyProvider({ apiKey }), publicProvider()]
 const { chains } = configureChains(supportedChains, providers)
 
 const RainbowButton = () => {
-  const { address } = useAccount({
-    onConnect() {
-      if (chain) {
-        dispatchGetNonce(address)
-      }
-    },
-    onDisconnect() {
-      dispatchRemoveToken()
-    },
-    onSuccess(data) {
-      return data
-    },
-  })
-  const { chain } = useNetwork()
-  const { dispatchGetNonce } = useGetNonce()
-  const { dispatchRemoveToken } = useRemoveToken()
-  const isSupportedNetwork = useSelector((state) => state.web3.isSupportedNetwork)
-  const userToken = useSelector((state) => state.userSign?.data?.access_token)
-  const isLoading = useSelector((state) => state.userNonce.loading || state.userSign.loading)
+  const { web3 } = useWeb3()
 
+  const { config } = web3
+  const { address } = useAccount()
+  const { chain } = useNetwork()
+  const { dispatchGetNonce, loading: userNonceLoading } = useGetNonce()
+  const { dispatchRemoveToken, userSign, loading: userSignLoading } = useUserSign()
+  const isSupportedNetwork = web3?.isSupportedNetwork
+  const userToken = userSign?.access_token
+  const isLoading = userNonceLoading || userSignLoading
 
   useEffect(() => {
     if (chain) {
       dispatchRemoveToken()
     }
-    const { unsupported } = chain
-    if (unsupported) {
-      console.log('The network you have selected is not supported.')
+    if (config) {
+      dispatchGetNonce(address)
     }
-  }, [chain, , dispatchRemoveToken])
+  }, [chain, config, dispatchRemoveToken])
 
   const handleSignInWallet = () => {
-    // dispatchSetConfig()
-    // dispatchConfig()
     dispatchGetNonce(address)
   }
 
