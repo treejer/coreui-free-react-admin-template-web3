@@ -6,7 +6,6 @@ import { mainnet, polygon, polygonMumbai } from 'wagmi/chains'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { useGetNonce } from '../../redux/modules/userNonce'
 import { useUserSign } from '../../redux/modules/userSign'
-import { useWeb3 } from '../../redux/modules/web3/slice'
 import { publicProvider } from 'wagmi/providers/public'
 import '@rainbow-me/rainbowkit/styles.css'
 
@@ -16,14 +15,10 @@ const providers = [alchemyProvider({ apiKey }), publicProvider()]
 const { chains } = configureChains(supportedChains, providers)
 
 const RainbowButton = () => {
-  const { web3 } = useWeb3()
-
-  const { config } = web3
   const { address } = useAccount()
   const { chain } = useNetwork()
   const { dispatchGetNonce, loading: userNonceLoading } = useGetNonce()
   const { dispatchRemoveToken, userSign, loading: userSignLoading } = useUserSign()
-  const isSupportedNetwork = web3?.isSupportedNetwork
   const userToken = userSign?.access_token
   const isLoading = userNonceLoading || userSignLoading
 
@@ -31,21 +26,22 @@ const RainbowButton = () => {
     if (chain) {
       dispatchRemoveToken()
     }
-    if (config) {
-      dispatchGetNonce(address)
-    }
-  }, [chain, config, dispatchRemoveToken])
+  }, [chain, dispatchRemoveToken])
 
-  const handleSignInWallet = () => {
-    dispatchGetNonce(address)
+  const handleSignInWallet = async () => {
+    try {
+      await dispatchGetNonce(address)
+    } catch (error) {
+      console.error('Error signing in:', error)
+    }
   }
 
-  const showSignInWalletButton = !userToken && address && isSupportedNetwork
+  const showSignInWalletButton = !userToken && address && !chain.unsupported
   return (
     <>
       {showSignInWalletButton && (
         <CButton color="light" className="mx-2" onClick={handleSignInWallet} disabled={isLoading}>
-          Sign In Wallet
+          {isLoading ? 'Signing In...' : 'Sign In Wallet'}
         </CButton>
       )}
       <RainbowKitProvider chains={chains} initialChain={process.env.REACT_APP_DEFAULT_CHAIN_ID}>
