@@ -7,10 +7,9 @@ const { actions, actionTypes, reducer } = new ReduxFetchState('userSign')
 
 export function* watchUserSign(action) {
   const { base_url } = yield select((state) => state.web3.config)
-  const API_URL = base_url
   const { address, signature } = action.payload
   try {
-    const response = yield apiPlugin.postData(`${API_URL}/login/${address}`, {
+    const response = yield apiPlugin.postData(`${base_url}/login/${address}`, {
       signature: signature,
     })
     yield put(actions.loadSuccess(response))

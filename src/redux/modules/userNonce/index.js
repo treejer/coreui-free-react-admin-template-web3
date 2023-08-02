@@ -10,10 +10,9 @@ const { actions, actionTypes, reducer } = new ReduxFetchState('userNonce')
 
 export function* watchUserNonce(action) {
   const { base_url } = yield select((state) => state.web3?.config || {})
-  const API_URL = base_url
   const { address } = action.payload
   try {
-    const response = yield apiPlugin.getData(`${API_URL}/nonce/${address}`)
+    const response = yield apiPlugin.getData(`${base_url}/nonce/${address}`)
     const { message } = response
     const signature = yield signMessage({ message: message })
     yield put(actions.loadSuccess(response))
@@ -35,7 +34,6 @@ export function useGetNonce() {
     const { address } = getAccount()
     dispatch(actions.load({ address }))
   }, [dispatch])
-
   return { userNonce, ...userNonceState, dispatchGetNonce }
 }
 
