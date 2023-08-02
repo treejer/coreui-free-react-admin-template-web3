@@ -1,6 +1,6 @@
 import { takeEvery, call, put } from 'redux-saga/effects'
 import { watchNetwork } from '@wagmi/core'
-import { setIsSupportedNetwork, setNetwork } from './slice'
+import { setIsSupportedNetwork, watchAppNetwrok } from './slice'
 import blockChainConfig from '../../../services/config'
 
 function* handleNetworkChange({ chain }) {
@@ -8,7 +8,7 @@ function* handleNetworkChange({ chain }) {
     const chainConfig = blockChainConfig[chain?.id]
     if (chainConfig) {
       yield put(setIsSupportedNetwork(true))
-      yield put(setNetwork(chainConfig))
+      yield put(watchAppNetwrok(chainConfig))
     } else {
       yield put(setIsSupportedNetwork(false))
     }
@@ -20,7 +20,9 @@ function* handleNetworkChange({ chain }) {
 function watchNetworkPromise() {
   return new Promise((resolve, reject) => {
     watchNetwork(({ chain }) => {
-      resolve({ chain })
+      if (!chain.unsupported) {
+        resolve({ chain })
+      }
     })
   })
 }
@@ -35,5 +37,5 @@ export function* watchCurrentNetwork() {
 }
 
 export function* web3Saga() {
-  yield takeEvery(setNetwork, watchCurrentNetwork)
+  yield takeEvery(watchAppNetwrok, watchCurrentNetwork)
 }
