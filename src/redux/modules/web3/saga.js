@@ -20,7 +20,7 @@ function* handleNetworkChange({ chain }) {
 function watchNetworkPromise() {
   return new Promise((resolve, reject) => {
     watchNetwork(({ chain }) => {
-      if (!chain.unsupported) {
+      if (chain && !chain.unsupported) {
         resolve({ chain })
       }
     })
